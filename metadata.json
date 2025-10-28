@@ -1,0 +1,7 @@
+{
+  "name": "Copy of Copy of GOD'S ANSWER",
+  "description": "An application where you can ask anything about God, major religions, and the universe from God's perspective, powered by Gemini.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
