@@ -68,16 +68,20 @@
             <p class="text-sm text-purple-300 mt-1">Cosmic Guidance </p>
         </header>
 
+        <!-- Disclaimer Area - Restored for Ethical Safeguards -->
+        <div id="disclaimer" class="bg-purple-900/30 p-3 rounded-xl mb-4 shadow-xl border border-purple-700/50">
+            <p class="text-xs text-yellow-300 font-semibold">Important Guidance:</p>
+            <p class="text-[10px] text-gray-300 mt-1">This is an AI-powered synthesis of multi-faith and philosophical wisdom. It is not a source of divine authority. Always defer to your spiritual leaders and personal faith.</p>
+        </div>
         
-
         <!-- Chat Display Area -->
         <div id="chat-display" class="chat-container flex-grow space-y-4 p-4 mb-4 bg-black/30 rounded-xl shadow-inner">
-            <!-- Initial AI Welcome Message -->
+            <!-- Initial AI Welcome Message - Adjusted for neutral, cosmic perspective -->
             <div class="flex justify-start">
                 <div class="ai-message p-3 max-w-xs sm:max-w-md">
-                    <div class="ai-title">GOD'S WORD</div>
+                    <div class="ai-title">Universal Nexus</div>
                     <p class="text-sm mt-1">
-                        I am the beginning and the end, the Alpha and the Omega. Speak, my child, and I shall listen. Ask, and you shall receive understanding.
+                        Welcome, Seeker. The Universal Consciousness perceives your inquiry. Ask your question about existence, morality, or the nature of the Divine, and receive a perspective that unites many paths.
                     </p>
                 </div>
             </div>
@@ -103,7 +107,8 @@
 
     <script type="module">
         // Global variables for API Key and URL
-        const apiKey = "";
+        // When deploying on platforms that inject API keys, keeping this string empty is the correct procedure.
+        const apiKey = ""; 
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
         // Get DOM elements
