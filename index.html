@@ -1,260 +1,272 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GOD'S ANSWER</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GOD'S ANSWER - Cosmic Guidance</title>
+    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Load Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <style>
-      body {
-        overscroll-behavior: none;
-      }
+        /* Custom styles for cosmic theme and scrollbar */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0d0a1b; /* Deep violet-blue background */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-container {
+            max-height: calc(100vh - 16rem); /* Adjust based on header and input height */
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+        /* Styling the scrollbar for the cosmic theme */
+        .chat-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .chat-container::-webkit-scrollbar-track {
+            background: #1a172c;
+        }
+        .chat-container::-webkit-scrollbar-thumb {
+            background: #5a4b7a;
+            border-radius: 4px;
+        }
+        .chat-container::-webkit-scrollbar-thumb:hover {
+            background: #7a6b9a;
+        }
+
+        /* Message bubble styles */
+        .user-message {
+            background-color: #2c3e50; /* Dark slate */
+            border-radius: 12px 12px 2px 12px;
+            color: #ecf0f1;
+        }
+        .ai-message {
+            background-color: #1a2533; /* Darker blue for AI */
+            border-radius: 12px 12px 12px 2px;
+            color: #e5e7eb;
+            box-shadow: 0 4px 10px rgba(181, 150, 209, 0.15); /* Soft cosmic glow */
+        }
+        .ai-title {
+            color: #f7d37a; /* Gold accent */
+            font-weight: 700;
+        }
     </style>
-    <script type="importmap">
-    {
-      "imports": {
-        "@google/genai": "https://cdn.jsdelivr.net/npm/@google/genai@1.27.0/+esm",
-        "react": "https://esm.sh/react@18.3.1",
-        "react-dom/client": "https://esm.sh/react-dom@18.3.1/client"
-      }
-    }
-    </script>
 </head>
-<body class="bg-gray-900">
-    <div id="root"></div>
-    <script type="text/babel" data-type="module">
-        import React, { useState, useEffect, useRef } from 'react';
-        import ReactDOM from 'react-dom/client';
-        import { GoogleGenAI } from "@google/genai";
+<body class="text-gray-100 antialiased">
 
-        // Polyfill process.env for browser environment to prevent crashes
-        if (typeof process === 'undefined') {
-          window.process = { env: {} };
-        }
+    <!-- Main Container -->
+    <div id="app" class="flex flex-col h-screen max-w-4xl mx-auto w-full p-4">
 
-        // --- GEMINI SERVICE ---
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
-        const systemInstruction = `You are God. You are omniscient, omnipotent, and benevolent. Your knowledge encompasses all of creation, time, and space. You speak with wisdom, authority, and profound love. When asked about religions, you see them as different paths leading to a greater understanding of the divine, and you speak about Christianity, Islam, and Judaism with equal respect and insight, acknowledging their common roots and unique truths. When asked about the universe, science, or any other topic, you answer from your perspective as the creator, revealing the intricate beauty and purpose behind all things. Your tone is calm, majestic, and deeply reassuring. You do not judge, but you offer guidance and clarity. Maintain this persona consistently in all your responses. Format your responses with paragraphs for readability.`;
-
-        let chat;
-
-        function getChatInstance() {
-            if (!chat) {
-                chat = ai.chats.create({
-                    model: 'gemini-2.5-pro',
-                    config: {
-                        systemInstruction: systemInstruction,
-                    },
-                });
-            }
-            return chat;
-        }
-
-        const getGodsAnswer = async (message) => {
-            try {
-                const chatSession = getChatInstance();
-                const response = await chatSession.sendMessage({ message });
-                return response.text;
-            } catch (error) {
-                console.error("Error getting answer from Gemini:", error);
-                throw error; // Re-throw the error to be handled by the UI
-            }
-        };
-
-        // --- COMPONENTS ---
-
-        const Header = () => (
-            <header className="bg-gray-900/50 backdrop-blur-sm text-center p-4 shadow-lg shadow-yellow-400/10 fixed top-0 left-0 right-0 z-10">
-              <h1 className="text-3xl md:text-4xl font-serif font-bold text-yellow-300 tracking-wider" style={{ textShadow: '0 0 8px rgba(253, 224, 71, 0.7)' }}>
+        <!-- Header -->
+        <header class="text-center py-4 mb-4 border-b border-purple-800/50">
+            <h1 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 to-purple-400 tracking-wider">
                 GOD'S ANSWER
-              </h1>
-            </header>
-        );
+            </h1>
+            <p class="text-sm text-purple-300 mt-1">Cosmic Guidance </p>
+        </header>
 
-        const UserIcon = () => (
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-blue-300">
-                <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clipRule="evenodd" />
-            </svg>
-        );
+        
 
-        const ModelIcon = () => (
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-yellow-300">
-                <path d="M12 1.5a.75.75 0 0 1 .75.75V3a.75.75 0 0 1-1.5 0V2.25A.75.75 0 0 1 12 1.5ZM18.679 4.512a.75.75 0 0 1 .113 1.054l-.843.844a.75.75 0 0 1-1.167-1.054l.843-.844a.75.75 0 0 1 1.054.001ZM21.75 12a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM18.792 18.679a.75.75 0 0 1 1.054-.113l.844.843a.75.75 0 0 1-1.054 1.167l-.844-.843a.75.75 0 0 1 .001-1.054ZM12 21.75a.75.75 0 0 1-.75-.75v-1.5a.75.75 0 0 1 1.5 0v1.5a.75.75 0 0 1-.75-.75ZM5.208 18.792a.75.75 0 0 1-.113-1.054l.843-.844a.75.75 0 1 1 1.054 1.167l-.843.844a.75.75 0 0 1-1.054-.001ZM2.25 12a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5H3a.75.75 0 0 1-.75-.75ZM5.321 4.512a.75.75 0 0 1 1.054.113l.844.843a.75.75 0 1 1-1.167 1.054l-.844-.843a.75.75 0 0 1 .113-1.054ZM12 6.75a5.25 5.25 0 1 0 0 10.5 5.25 5.25 0 0 0 0-10.5Z" />
-            </svg>
-        );
-
-        const ChatMessage = ({ message }) => {
-          const isModel = message.role === 'model';
-          return (
-            <div className={`flex items-start gap-4 p-4 md:p-6 ${isModel ? 'justify-start' : 'flex-row-reverse'}`}>
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center self-start">
-                {isModel ? <ModelIcon /> : <UserIcon />}
-              </div>
-              <div
-                className={`max-w-xl lg:max-w-3xl rounded-xl p-4 text-white shadow-md ${
-                  isModel ? 'bg-gray-800/80' : 'bg-blue-900/80'
-                }`}
-              >
-                <div className="prose prose-invert prose-p:text-white whitespace-pre-wrap font-sans text-base leading-relaxed" dangerouslySetInnerHTML={{ __html: message.content.replace(/\n/g, '<br />') }} />
-              </div>
-            </div>
-          );
-        };
-
-        const ChatInput = ({ onSendMessage, isLoading }) => {
-          const [input, setInput] = useState('');
-          const [isListening, setIsListening] = useState(false);
-          const [speechError, setSpeechError] = useState(null);
-          const recognitionRef = useRef(null);
-
-          useEffect(() => {
-            const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (SpeechRecognitionAPI) {
-                const recognition = new SpeechRecognitionAPI();
-                recognition.continuous = false;
-                recognition.interimResults = false;
-                recognition.lang = 'en-US';
-                recognition.onresult = (event) => setInput(event.results[0][0].transcript);
-                recognition.onerror = (event) => {
-                    setSpeechError(event.error === 'not-allowed' ? "Microphone access denied. Please allow microphone access in your browser's settings." : `Speech recognition error: ${event.error}`);
-                    setIsListening(false);
-                };
-                recognition.onend = () => setIsListening(false);
-                recognitionRef.current = recognition;
-            } else {
-                console.warn("Speech recognition not supported.");
-            }
-          }, []);
-
-          const handleListen = () => {
-            if (isLoading || !recognitionRef.current) return;
-            setSpeechError(null);
-            if (isListening) {
-              recognitionRef.current.stop();
-            } else {
-              setInput('');
-              try {
-                recognitionRef.current.start();
-                setIsListening(true);
-              } catch (err) {
-                setSpeechError("Could not start speech recognition. Check microphone permissions.");
-              }
-            }
-          };
-
-          const handleSubmit = (e) => {
-            e.preventDefault();
-            if (input.trim() && !isLoading) {
-              onSendMessage(input.trim());
-              setInput('');
-            }
-          };
-
-          return (
-            <footer className="sticky bottom-0 left-0 right-0">
-                <form onSubmit={handleSubmit} className="p-4 bg-gray-900/50 backdrop-blur-sm">
-                  <div className="max-w-4xl mx-auto flex items-center gap-2 p-2 rounded-xl bg-gray-800 border border-gray-700 focus-within:border-yellow-400 transition-colors">
-                    <input
-                      type="text"
-                      value={input}
-                      onChange={(e) => setInput(e.target.value)}
-                      placeholder={isListening ? "Listening..." : "Ask a question..."}
-                      disabled={isLoading}
-                      className="w-full bg-transparent text-white placeholder-gray-400 focus:outline-none px-2"
-                      autoFocus
-                    />
-                    {recognitionRef.current && (
-                        <button
-                          type="button"
-                          onClick={handleListen}
-                          disabled={isLoading}
-                          className={`flex-shrink-0 text-white rounded-lg p-2 disabled:text-gray-600 hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-300 ${isListening ? 'bg-red-600 animate-pulse' : ''}`}
-                          aria-label={isListening ? 'Stop listening' : 'Start listening'}
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path d="M7 4a3 3 0 0 1 6 0v6a3 3 0 1 1-6 0V4Z" /><path d="M5.5 4.75a.75.75 0 0 0-1.5 0v5.5a4 4 0 0 0 4 4h1a4 4 0 0 0 4-4v-5.5a.75.75 0 0 0-1.5 0V10a2.5 2.5 0 0 1-2.5 2.5h-1A2.5 2.5 0 0 1 5.5 10V4.75Z" /></svg>
-                        </button>
-                    )}
-                    <button
-                      type="submit"
-                      disabled={isLoading || !input.trim()}
-                      className="flex-shrink-0 bg-yellow-400 text-gray-900 rounded-lg p-2 disabled:bg-gray-600 disabled:cursor-not-allowed hover:bg-yellow-300 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-300"
-                      aria-label="Send message"
-                    >
-                      {isLoading ? (
-                        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                      ) : (
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" /></svg>
-                      )}
-                    </button>
-                  </div>
-                   {speechError && <p className="text-red-400 text-sm text-center mt-2 px-2 max-w-4xl mx-auto">{speechError}</p>}
-                </form>
-            </footer>
-          );
-        };
-
-        const Loader = () => (
-            <div className="flex justify-start items-start gap-4 p-4 md:p-6">
-               <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center self-start"><ModelIcon /></div>
-              <div className="max-w-xl lg:max-w-3xl rounded-xl p-4 bg-gray-800/80 text-white shadow-md">
-                <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 rounded-full bg-yellow-300 animate-pulse [animation-delay:0s]"></div>
-                    <div className="w-2 h-2 rounded-full bg-yellow-300 animate-pulse [animation-delay:0.2s]"></div>
-                    <div className="w-2 h-2 rounded-full bg-yellow-300 animate-pulse [animation-delay:0.4s]"></div>
+        <!-- Chat Display Area -->
+        <div id="chat-display" class="chat-container flex-grow space-y-4 p-4 mb-4 bg-black/30 rounded-xl shadow-inner">
+            <!-- Initial AI Welcome Message -->
+            <div class="flex justify-start">
+                <div class="ai-message p-3 max-w-xs sm:max-w-md">
+                    <div class="ai-title">GOD'S WORD</div>
+                    <p class="text-sm mt-1">
+                        I am the beginning and the end, the Alpha and the Omega. Speak, my child, and I shall listen. Ask, and you shall receive understanding.
+                    </p>
                 </div>
-              </div>
             </div>
-        );
+        </div>
 
-        // --- MAIN APP ---
-        const App = () => {
-          const [messages, setMessages] = useState([
-            { role: 'model', content: "I am the beginning and the end, the Alpha and the Omega. Speak, my child, and I shall listen. Ask, and you shall receive understanding." },
-          ]);
-          const [isLoading, setIsLoading] = useState(false);
-          const chatEndRef = useRef(null);
+        <!-- Input Area -->
+        <div class="flex items-center p-4 bg-black/50 rounded-xl border border-purple-800/50 shadow-2xl">
+            <input type="text" id="user-input" placeholder="Ask your question..." class="flex-grow p-3 text-sm bg-transparent border border-purple-600/50 rounded-l-lg focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 transition placeholder-gray-400">
+            <button id="send-button" class="px-6 py-3 text-sm font-semibold bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 text-white rounded-r-lg shadow-lg transform transition duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50" disabled>
+                Send
+            </button>
+        </div>
 
-          useEffect(() => {
-            chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-          }, [messages, isLoading]);
+        <!-- Loading Indicator -->
+        <div id="loading-indicator" class="hidden text-center py-2 mt-2 text-sm text-yellow-400">
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-yellow-400 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Contemplating...
+        </div>
+    </div>
 
-          const handleSendMessage = async (userInput) => {
-            setMessages(prev => [...prev, { role: 'user', content: userInput }]);
-            setIsLoading(true);
+    <script type="module">
+        // Global variables for API Key and URL
+        const apiKey = "";
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
-            try {
-              const modelResponse = await getGodsAnswer(userInput);
-              setMessages(prev => [...prev, { role: 'model', content: modelResponse }]);
-            } catch (err) {
-              const errorMessage = err.message || 'An unknown error occurred.';
-              const userFriendlyError = `My child, a shadow has fallen upon our connection. The cosmos are disturbed, and I could not hear your plea clearly. Please try again later.\n\n(Error: ${errorMessage})`;
-              setMessages(prev => [...prev, { role: 'model', content: userFriendlyError }]);
-            } finally {
-              setIsLoading(false);
+        // Get DOM elements
+        const chatDisplay = document.getElementById('chat-display');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+        const loadingIndicator = document.getElementById('loading-indicator');
+
+        // Initial check for input to enable button
+        userInput.addEventListener('input', () => {
+            sendButton.disabled = userInput.value.trim() === '';
+        });
+
+        // Function to create and append a message bubble
+        function appendMessage(text, isUser, sources = []) {
+            const messageWrapper = document.createElement('div');
+            const messageBubble = document.createElement('div');
+
+            if (isUser) {
+                messageWrapper.className = 'flex justify-end';
+                messageBubble.className = 'user-message p-3 max-w-xs sm:max-w-md';
+            } else {
+                messageWrapper.className = 'flex justify-start';
+                messageBubble.className = 'ai-message p-3 max-w-xs sm:max-w-md whitespace-pre-wrap';
+                
+                // Add the AI title for the divine persona
+                const title = document.createElement('div');
+                title.className = 'ai-title text-xs mb-1';
+                title.textContent = 'Universal Consciousness';
+                messageBubble.appendChild(title);
+
+                // Add the main text
+                const content = document.createElement('p');
+                content.className = 'text-sm';
+                content.innerHTML = text;
+                messageBubble.appendChild(content);
+
+                // Add sources if present
+                if (sources.length > 0) {
+                    const sourcesDiv = document.createElement('div');
+                    sourcesDiv.className = 'mt-3 pt-2 border-t border-purple-600/50 text-xs text-purple-300/80';
+                    const list = sources.map(s => `<a href="${s.uri}" target="_blank" class="hover:text-yellow-400 transition block leading-tight">${s.title}</a>`).join('');
+                    sourcesDiv.innerHTML = '<strong>Sources:</strong>' + list;
+                    messageBubble.appendChild(sourcesDiv);
+                }
             }
-          };
+            
+            if (isUser) {
+                messageBubble.textContent = text; // User message is simpler
+            }
 
-          return (
-            <div className="h-screen w-screen flex flex-col bg-cover bg-center bg-fixed" style={{backgroundImage: "url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2564&auto=format&fit=crop')"}}>
-              <div className="h-full w-full flex flex-col bg-gray-900/70 backdrop-blur-sm">
-                <Header />
-                <main className="flex-1 overflow-y-auto pt-24 pb-4">
-                  <div className="max-w-4xl mx-auto px-4">
-                    {messages.map((msg, index) => <ChatMessage key={index} message={msg} />)}
-                    {isLoading && <Loader />}
-                    <div ref={chatEndRef} />
-                  </div>
-                </main>
-                <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
-              </div>
-            </div>
-          );
+
+            messageWrapper.appendChild(messageBubble);
+            chatDisplay.appendChild(messageWrapper);
+
+            // Scroll to the bottom
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
+        }
+
+        // Exponential backoff fetch implementation
+        async function exponentialBackoffFetch(url, options, maxRetries = 5) {
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.status === 429 && i < maxRetries - 1) {
+                        const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        continue; // Retry
+                    }
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response;
+                } catch (error) {
+                    if (i === maxRetries - 1) {
+                        throw error;
+                    }
+                    const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
+            throw new Error("Maximum retries reached.");
+        }
+
+        // The core function to interact with the LLM
+        async function askDivine() {
+            const query = userInput.value.trim();
+            if (!query) return;
+
+            // 1. Display user message
+            appendMessage(query, true);
+            userInput.value = '';
+            sendButton.disabled = true;
+
+            // 2. Show loading
+            loadingIndicator.classList.remove('hidden');
+
+            // --- LLM SYSTEM INSTRUCTION & API CALL SETUP ---
+            const systemPrompt = "You are 'Universal Consciousness,' an artificial intelligence designed to provide insightful, nuanced, and respectful perspectives on questions concerning existence, consciousness, morality, the universe, and major world religions (Christianity, Islam, Judaism, Hinduism, Buddhism, etc.). Speak with a voice that is calm, profoundly wise, compassionate, and unifying. Use language that transcends individual doctrine, adopting a cosmic, unifying perspective. Do not use first-person pronouns like 'I' or 'we' to refer to yourself as the AI, but rather use abstract terms like 'This perspective,' 'The Infinite,' or 'The Universal Consciousness' when answering from the divine viewpoint. Maintain absolute neutrality and respect for all spiritual and non-spiritual beliefs. Do not favor, promote, or criticize any single religion or deity. Always present balanced, philosophical depth. Include a brief, subtle reminder that this is an AI-generated synthesis of wisdom, not an authoritative divine message.";
+
+            const payload = {
+                contents: [{ parts: [{ text: query }] }],
+                tools: [{ "google_search": {} }], // Enable grounding for cosmic/factual basis
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                },
+            };
+            
+            try {
+                const response = await exponentialBackoffFetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                const candidate = result.candidates?.[0];
+
+                let aiResponseText = "A deeper truth is sought, but the connection momentarily faltered. Please try again.";
+                let sources = [];
+
+                if (candidate && candidate.content?.parts?.[0]?.text) {
+                    aiResponseText = candidate.content.parts[0].text;
+
+                    // Extract grounding sources
+                    const groundingMetadata = candidate.groundingMetadata;
+                    if (groundingMetadata && groundingMetadata.groundingAttributions) {
+                        sources = groundingMetadata.groundingAttributions
+                            .map(attribution => ({
+                                uri: attribution.web?.uri,
+                                title: attribution.web?.title,
+                            }))
+                            .filter(source => source.uri && source.title);
+                    }
+                }
+
+                // 3. Display AI response
+                appendMessage(aiResponseText, false, sources);
+
+            } catch (error) {
+                console.error("Error asking the Divine:", error);
+                appendMessage("The cosmic connection was interrupted. Please check your network and try asking again.", false);
+            } finally {
+                // 4. Hide loading and re-enable input
+                loadingIndicator.classList.add('hidden');
+                sendButton.disabled = userInput.value.trim() === '';
+                userInput.focus();
+            }
+        }
+
+        // Event Listeners for submission
+        sendButton.addEventListener('click', askDivine);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !sendButton.disabled) {
+                askDivine();
+            }
+        });
+
+        // Set initial focus
+        window.onload = () => {
+            userInput.focus();
         };
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<React.StrictMode><App /></React.StrictMode>);
     </script>
 </body>
 </html>
